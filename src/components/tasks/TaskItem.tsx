@@ -25,7 +25,7 @@ const STATUS_DOT = {
 
 interface IProps {
   task: ITask;
-  onEdit: () => void;
+  onEdit: (id: string) => void;
 }
 
 export function TaskItem({ task, onEdit }: IProps) {
@@ -36,8 +36,6 @@ export function TaskItem({ task, onEdit }: IProps) {
   const handleDelete = () => {
     toast.warning("Task deleted", { description: task.title });
   };
-
-  const date = new Date().toISOString();
 
   return (
     <Card className="flex flex-row items-start justify-between gap-3 p-4">
@@ -55,7 +53,7 @@ export function TaskItem({ task, onEdit }: IProps) {
           </span>
           <span className="text-xs text-muted-foreground">·</span>
           <span className="text-xs text-muted-foreground">
-            {formatDistanceToNow(date, { addSuffix: true })}
+            {formatDistanceToNow(task.updatedAt, { addSuffix: true })}
           </span>
         </div>
 

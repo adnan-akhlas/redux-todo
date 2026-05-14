@@ -1,4 +1,4 @@
-import { useForm, Controller } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -18,21 +16,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   TASKS_PRIORITY,
   TASKS_PRIORITY_LABEL,
   TASKS_STATUS,
   TASKS_STATUS_LABEL,
-  type ITask,
 } from "@/redux/features/tasks";
-import { useAppDispatch } from "@/redux/hooks";
 import { addTask } from "@/redux/features/tasks/tasks.slice";
+import { useAppDispatch } from "@/redux/hooks";
+import { Controller, useForm } from "react-hook-form";
 
-export function TaskFormDialog({ open, mode, onClose }) {
+interface IProps {
+  open: boolean;
+  mode: "edit" | "create";
+  onClose: () => void;
+}
+
+export function TaskFormDialog({ open, mode, onClose }: IProps) {
   const { register, handleSubmit, control } = useForm();
   const dispatch = useAppDispatch();
 
-  const onSubmit = (values: ITask) => {
+  const onSubmit = (values) => {
     console.log(values);
     dispatch(addTask(values));
     onClose();
