@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PriorityBadge } from "./PriorityBadge";
 import { cn } from "@/lib/utils";
+import { TASKS_STATUS_LABEL, type ITask } from "@/redux/features/tasks";
 
 const STATUS_DOT = {
   pending: "bg-slate-400",
@@ -22,7 +23,12 @@ const STATUS_DOT = {
   done: "bg-emerald-500",
 };
 
-export function TaskItem({ task, onEdit }) {
+interface IProps {
+  task: ITask;
+  onEdit: () => void;
+}
+
+export function TaskItem({ task, onEdit }: IProps) {
   const handleStatusChange = (value: string) => {
     console.log(value);
   };
@@ -30,6 +36,8 @@ export function TaskItem({ task, onEdit }) {
   const handleDelete = () => {
     toast.warning("Task deleted", { description: task.title });
   };
+
+  const date = new Date().toISOString();
 
   return (
     <Card className="flex flex-row items-start justify-between gap-3 p-4">
@@ -39,15 +47,15 @@ export function TaskItem({ task, onEdit }) {
             aria-hidden
             className={cn(
               "inline-block h-2 w-2 rounded-full",
-              // STATUS_DOT[task.status],
+              STATUS_DOT[task.status],
             )}
           />
           <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {/* {STATUS_LABEL[task.status]} */}
+            {TASKS_STATUS_LABEL[task.status]}
           </span>
           <span className="text-xs text-muted-foreground">·</span>
           <span className="text-xs text-muted-foreground">
-            {formatDistanceToNow(task.updatedAt, { addSuffix: true })}
+            {formatDistanceToNow(date, { addSuffix: true })}
           </span>
         </div>
 

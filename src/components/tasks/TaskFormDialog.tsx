@@ -23,13 +23,18 @@ import {
   TASKS_PRIORITY_LABEL,
   TASKS_STATUS,
   TASKS_STATUS_LABEL,
+  type ITask,
 } from "@/redux/features/tasks";
+import { useAppDispatch } from "@/redux/hooks";
+import { addTask } from "@/redux/features/tasks/tasks.slice";
 
 export function TaskFormDialog({ open, mode, onClose }) {
   const { register, handleSubmit, control } = useForm();
+  const dispatch = useAppDispatch();
 
-  const onSubmit = (values) => {
+  const onSubmit = (values: ITask) => {
     console.log(values);
+    dispatch(addTask(values));
     onClose();
   };
 

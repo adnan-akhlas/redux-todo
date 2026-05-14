@@ -1,10 +1,15 @@
 import { TaskItem } from "./TaskItem";
 import { Card } from "@/components/ui/card";
+import {
+  selectAllTasks,
+  selectTasksCount,
+} from "@/redux/features/tasks/tasks.selector";
+import { useAppSelector } from "@/redux/hooks";
 import { ClipboardListIcon, FilterIcon } from "lucide-react";
 
 export function TaskList({ onEdit }) {
-  const tasks = [];
-  const total = 0;
+  const tasks = useAppSelector(selectAllTasks);
+  const total = useAppSelector(selectTasksCount);
   const isFiltering = false;
 
   if (total === 0) {
