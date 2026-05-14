@@ -7,6 +7,8 @@ export interface ITask {
   description: string;
   priority: TTaskPriority;
   status: TTaskStatus;
+  createdAt: number;
+  updatedAt: number;
 }
 
 export type TInitialState = ITask[];
