@@ -11,7 +11,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  TASKS_PRIORITY,
+  TASKS_PRIORITY_LABEL,
+  TASKS_STATUS,
+  TASKS_STATUS_LABEL,
+} from "@/redux/features/tasks";
 
 export function TaskFormDialog({ open, mode, onClose }) {
   const { register, handleSubmit, control } = useForm();
@@ -74,9 +86,16 @@ export function TaskFormDialog({ open, mode, onClose }) {
                 name="status"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
+                    <SelectContent className="top-8">
+                      {TASKS_STATUS.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {TASKS_STATUS_LABEL[status]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                 )}
               />
@@ -89,9 +108,16 @@ export function TaskFormDialog({ open, mode, onClose }) {
                 name="priority"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select priority" />
                     </SelectTrigger>
+                    <SelectContent className="top-8">
+                      {TASKS_PRIORITY.map((priority) => (
+                        <SelectItem key={priority} value={priority}>
+                          {TASKS_PRIORITY_LABEL[priority]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                 )}
               />
