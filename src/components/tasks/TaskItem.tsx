@@ -15,7 +15,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PriorityBadge } from "./PriorityBadge";
 import { cn } from "@/lib/utils";
-import { TASKS_STATUS_LABEL, type ITask } from "@/redux/features/tasks";
+import {
+  TASKS_STATUS,
+  TASKS_STATUS_LABEL,
+  type ITask,
+  type TTaskStatus,
+} from "@/redux/features/tasks";
+import { useAppDispatch } from "@/redux/hooks";
+import {
+  removeTask,
+  updateTaskStatus,
+} from "@/redux/features/tasks/tasks.slice";
 
 const STATUS_DOT = {
   pending: "bg-slate-400",
@@ -29,11 +39,16 @@ interface IProps {
 }
 
 export function TaskItem({ task, onEdit }: IProps) {
+  const dispatch = useAppDispatch();
+
   const handleStatusChange = (value: string) => {
-    console.log(value);
+    const status = value as TTaskStatus;
+    dispatch(updateTaskStatus({ id: task.id, status }));
+    toast.success("Task status updated successfully.");
   };
 
   const handleDelete = () => {
+    dispatch(removeTask(task.id));
     toast.warning("Task deleted", { description: task.title });
   };
 
@@ -89,11 +104,11 @@ export function TaskItem({ task, onEdit }: IProps) {
             value={task.status}
             onValueChange={handleStatusChange}
           >
-            {/* {TASK_STATUSES.map((s) => (
+            {TASKS_STATUS.map((s) => (
               <DropdownMenuRadioItem key={s} value={s}>
-                {STATUS_LABEL[s]}
+                {TASKS_STATUS_LABEL[s]}
               </DropdownMenuRadioItem>
-            ))} */}
+            ))}
           </DropdownMenuRadioGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={() => onEdit(task.id)}>

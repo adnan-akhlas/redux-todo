@@ -23,23 +23,52 @@ import {
   TASKS_STATUS,
   TASKS_STATUS_LABEL,
 } from "@/redux/features/tasks";
-import { addTask } from "@/redux/features/tasks/tasks.slice";
-import { useAppDispatch } from "@/redux/hooks";
+import { taskFormDefaultInput } from "@/redux/features/tasks/tasks.schema";
+import { selectTaskById } from "@/redux/features/tasks/tasks.selector";
+import { addTask, updateTask } from "@/redux/features/tasks/tasks.slice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import type { RootState } from "@/redux/store";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface IProps {
   open: boolean;
   mode: "edit" | "create";
   onClose: () => void;
+  editingId: string | null;
 }
 
-export function TaskFormDialog({ open, mode, onClose }: IProps) {
-  const { register, handleSubmit, control } = useForm();
+export function TaskFormDialog({ open, mode, onClose, editingId }: IProps) {
+  const { register, handleSubmit, control, reset } = useForm();
   const dispatch = useAppDispatch();
+  const editing = useAppSelector((state: RootState) =>
+    editingId ? selectTaskById(state, editingId) : undefined,
+  );
+
+  useEffect(() => {
+    if (!open) return;
+    if (mode === "edit" && editing) {
+      reset({
+        title: editing.title,
+        description: editing.description,
+        status: editing.status,
+        priority: editing.priority,
+      });
+    } else {
+      reset(taskFormDefaultInput);
+    }
+  }, [editing, mode, open, reset]);
 
   const onSubmit = (values) => {
     console.log(values);
-    dispatch(addTask(values));
+    if (mode === "edit" && editing) {
+      dispatch(updateTask({ id: editing.id, change: values }));
+      toast.success("Task updated successfully.");
+    } else {
+      dispatch(addTask(values));
+      toast.success("Task created successfully.");
+    }
     onClose();
   };
 
